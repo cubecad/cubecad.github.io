@@ -1,6 +1,10 @@
-# HiP-CAD: Hierarchical Token Pooling Transformers for CAD Reverse Engineering
+# CubeCAD: Unsupervised Deep Learning and Cuboid Abstraction for 3D CAD Reverse Engineering
 
-This repository contains the source code for the [HiP-CAD project page](https://arxiv.org/abs/2011.12948).
+This repository contains the source code for the [CubeCAD project page](https://PAPER-LINK).
+
+## About
+
+CubeCAD is a novel AI-driven framework for reverse engineering parametric 3D CAD models from boundary representation (B-Rep) geometries. The proposed coarse-to-fine approach first decomposes input 3D geometry into cuboid primitives, then recognizes symmetries and predicts construction paths and sketch profiles for fine-grained reconstruction.
 
 ## Deploying on GitHub Pages
 
