@@ -30,13 +30,23 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <!-- Three.js for 3D mesh visualization -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 
 <body>
@@ -55,20 +65,20 @@
             </h2>
             <div class="is-size-5 publication-authors">
               <span class="author-block">
-                <a href="https://keunhong.com">Altay Kacan</a><sup>1</sup>,</span>
+                <a href="https://ALTAY-LINK">Altay Kacan</a><sup>1</sup>,</span>
               <span class="author-block">
-                <a href="https://utkarshsinha.com">Youssef Youssef</a><sup>1,2</sup>,</span>
+                <a href="https://www.linkedin.com/in/youssef-sherif-145a551b4/">Youssef Youssef</a><sup>1,2</sup>,</span>
               <span class="author-block">
-                <a href="https://jonbarron.info">Bertram Fuchs</a><sup>1</sup>,
+                <a href="https://BERTRAM-LINK">Bertram Fuchs</a><sup>1</sup>,
               </span>
               <span class="author-block">
-                <a href="http://sofienbouaziz.com">Oliver Lohse</a><sup>1</sup>,
+                <a href="http://OLIVER-LINK">Oliver Lohse</a><sup>1</sup>,
               </span>
               <span class="author-block">
-                <a href="https://www.danbgoldman.com">Stefan Goetz</a><sup>3</sup>,
+                <a href="https://STEFAN-LINK">Stefan Goetz</a><sup>3</sup>,
               </span>
               <span class="author-block">
-                <a href="https://homes.cs.washington.edu/~seitz/">Sandro Wartzack</a><sup>3</sup>,
+                <a href="https://SANDRO-LINK">Sandro Wartzack</a><sup>3</sup>,
               </span>
 
             </div>
@@ -85,7 +95,7 @@
               <div class="publication-links">
                 <!-- PDF Link. -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/pdf/2011.12948" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://PAPER-LINK" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                     </span>
@@ -93,7 +103,7 @@
                   </a>
                 </span>
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2011.12948" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://ARXIV-LINK" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="ai ai-arxiv"></i>
                     </span>
@@ -121,7 +131,7 @@
                 </span> -->
                 <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                  <a href="https://huggingface.co/datasets/yu-nomi/GenCAD_3D"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="far fa-images"></i>
@@ -203,6 +213,342 @@
     </div>
   </section>
 
+  <!-- 3D Mesh Visualization Section -->
+  <section class="section" id="mesh-results">
+    <div class="container" style="max-width: 1200px;">
+      <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+      <p class="has-text-centered" style="margin-bottom: 0.5rem;">
+        Ground truth CAD meshes, input point clouds (4096 points), and predicted meshes. Drag to rotate, scroll to zoom.
+      </p>
+
+      <!-- Column headers -->
+      <div class="mesh-col-headers">
+        <div class="col-head">Ground Truth</div>
+        <div class="col-head">Input Point Cloud</div>
+        <div class="col-head">Prediction</div>
+      </div>
+
+      <!-- Carousel -->
+      <div class="mesh-carousel-wrap">
+        <button class="carousel-btn carousel-prev" id="carousel-prev">&#10094;</button>
+        <div class="mesh-carousel" id="mesh-carousel"></div>
+        <button class="carousel-btn carousel-next" id="carousel-next">&#10095;</button>
+      </div>
+      <div class="carousel-counter has-text-centered" id="carousel-counter"></div>
+    </div>
+  </section>
+
+  <style>
+    .mesh-col-headers {
+      display: flex; gap: 8px; margin-bottom: 0.3rem; padding: 0 50px;
+    }
+    .mesh-col-headers .col-head {
+      flex: 1; text-align: center; font-weight: 700; font-size: 0.95rem; color: #4a4a4a;
+    }
+    .mesh-carousel-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .carousel-btn {
+      position: absolute; z-index: 10; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%;
+      width: 44px; height: 44px; font-size: 22px; cursor: pointer; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .carousel-btn:hover { background: rgba(0,0,0,0.85); }
+    .carousel-prev { left: 0; }
+    .carousel-next { right: 0; }
+    .mesh-carousel {
+      overflow: hidden; width: 100%; padding: 0 50px;
+    }
+    .mesh-slide {
+      display: none;
+    }
+    .mesh-slide.active {
+      display: block;
+    }
+    .mesh-row {
+      display: flex; gap: 8px; margin-bottom: 10px;
+    }
+    .mesh-cell {
+      flex: 1; text-align: center;
+    }
+    .mesh-cell canvas {
+      width: 100%; height: 200px; display: block;
+      border: 1px solid #e0e0e0; border-radius: 6px; background: #f0f0f0;
+      touch-action: none;
+      cursor: grab;
+    }
+    .mesh-cell canvas:active {
+      cursor: grabbing;
+    }
+    .carousel-counter {
+      margin-top: 0.5rem; font-size: 0.9rem; color: #888;
+    }
+  </style>
+
+  <script type="module">
+  import * as THREE from 'three';
+  import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const SAMPLES = [
+    "00475184","00739986","00148953","00091649","00423708","00664811","00872963","00509963","00183507","00698828",
+    "00723439","00119784","00451903","00578202","00642204","00361848",
+    "00014648","00019109","00024838","00025814","00026929","00034261","00035151","00036288","00048546","00049922",
+    "00051232","00051852","00059014","00059311","00061201","00073228","00096356","00096611","00113843","00115555",
+    "00131007","00131661","00133396","00137180","00138949","00144800","00150876","00155514","00161733","00162458",
+    "00172053","00181768","00189220","00195350","00214086","00214400","00218343","00239001","00242361","00256362",
+    "00259372","00261876","00268141","00270325","00271137","00271164","00271381","00272357","00280163","00280175",
+    "00282209","00282301","00286425","00296055","00304599","00308459","00314041","00317674","00319890","00320685",
+    "00323955","00325447","00328618","00332908","00333483","00333484","00339204","00339538","00350604","00353694",
+    "00357171","00368540","00372633","00379407","00382408","00390435","00396068","00396669","00399723","00402853",
+    "00403280","00407412","00417142","00419350","00421830","00428859","00452196","00457504","00457901","00461841",
+    "00463011","00463354","00466220","00466753","00472273","00472622","00476078","00483284","00486960","00488419",
+    "00490032","00493649","00494322","00494330","00496863","00497161","00499288","00510173","00523072","00526577",
+    "00534040","00537416","00537479","00546589","00556004","00572252","00576154","00576517","00580477","00591066",
+    "00592151","00601247","00605921","00606684","00608556","00613112","00615912","00618095","00626492","00631497",
+    "00637628","00641690","00646726","00646821","00655723","00660508","00663723","00663730","00668793","00685566",
+    "00699297","00702563","00703934","00705130","00705153","00709211","00710822","00711350","00715140","00721182",
+    "00729519","00730056","00730446","00737781","00749014","00754864","00757284","00776997","00787767","00791289",
+    "00800054","00803811","00804163","00807373","00824274","00825133","00832249","00837919","00839687","00842314",
+    "00846614","00856486","00857764","00861494","00862348","00863960","00867409","00873599","00877142","00881087",
+    "00881494","00894408","00905972","00908286","00911125","00917120","00919659","00923164","00934777","00935282",
+    "00938625","00946908","00947159","00976541","00977659","00980526","00981891","00983512","00986047","00992691"
+  ];
+
+  const BASE = 'static/eval_visuals/E5_2XLarge_SynthBal';
+  const PER_SLIDE = 5;
+  const NUM_POINTS = 4096;
+  let currentSlide = 0;
+  let totalSlides = 0;
+  const activeViewers = []; // track active animation frames & renderers
+
+  function samplePointsFromGeometry(geometry, count) {
+    const pos = geometry.attributes.position;
+    const triangles = [];
+    let totalArea = 0;
+    for (let i = 0; i < pos.count; i += 3) {
+      const a = new THREE.Vector3().fromBufferAttribute(pos, i);
+      const b = new THREE.Vector3().fromBufferAttribute(pos, i+1);
+      const c = new THREE.Vector3().fromBufferAttribute(pos, i+2);
+      const ab = new THREE.Vector3().subVectors(b, a);
+      const ac = new THREE.Vector3().subVectors(c, a);
+      const area = new THREE.Vector3().crossVectors(ab, ac).length() * 0.5;
+      triangles.push({ a, b, c, area });
+      totalArea += area;
+    }
+    const cdf = [];
+    let cumulative = 0;
+    for (const tri of triangles) { cumulative += tri.area / totalArea; cdf.push(cumulative); }
+    const points = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const r = Math.random();
+      let idx = cdf.findIndex(v => v >= r);
+      if (idx < 0) idx = cdf.length - 1;
+      const tri = triangles[idx];
+      let u = Math.random(), v = Math.random();
+      if (u + v > 1) { u = 1 - u; v = 1 - v; }
+      points[i*3]   = tri.a.x + u*(tri.b.x-tri.a.x) + v*(tri.c.x-tri.a.x);
+      points[i*3+1] = tri.a.y + u*(tri.b.y-tri.a.y) + v*(tri.c.y-tri.a.y);
+      points[i*3+2] = tri.a.z + u*(tri.b.z-tri.a.z) + v*(tri.c.z-tri.a.z);
+    }
+    return points;
+  }
+
+  function destroyActiveViewers() {
+    for (const v of activeViewers) {
+      cancelAnimationFrame(v.rafId);
+      v.renderer.dispose();
+      v.renderer.forceContextLoss();
+      v.controls.dispose();
+    }
+    activeViewers.length = 0;
+  }
+
+  function createViewer(container) {
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '200px';
+    canvas.style.display = 'block';
+    canvas.style.touchAction = 'none';
+    container.appendChild(canvas);
+
+    // Prevent page scroll when zooming on canvas
+    canvas.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive: false });
+
+    const w = canvas.clientWidth || 300;
+    const h = canvas.clientHeight || 200;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h, false);
+    renderer.setClearColor(0xf0f0f0, 1);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, w/h, 0.01, 1000);
+    camera.position.set(2, 2, 2);
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+    controls.enableRotate = true;
+    controls.enableZoom = true;
+    controls.enablePan = true;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2;
+    // Stop auto-rotate when user interacts
+    controls.addEventListener('start', () => { controls.autoRotate = false; });
+    controls.addEventListener('end', () => { controls.autoRotate = true; });
+
+    // Studio-style lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+    scene.add(new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.5));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(5, 10, 7); scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xb0c4de, 0.6);
+    fillLight.position.set(-5, 3, -5); scene.add(fillLight);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    rimLight.position.set(0, -5, 10); scene.add(rimLight);
+    // Generate environment map for reflections
+    const envScene = new THREE.Scene();
+    envScene.add(new THREE.AmbientLight(0xffffff, 1));
+    const envRT = new THREE.WebGLCubeRenderTarget(128);
+    const envCam = new THREE.CubeCamera(0.1, 100, envRT);
+    const gradientCanvas = document.createElement('canvas');
+    gradientCanvas.width = 2; gradientCanvas.height = 2;
+    const gCtx = gradientCanvas.getContext('2d');
+    gCtx.fillStyle = '#b0c4de'; gCtx.fillRect(0,0,2,1);
+    gCtx.fillStyle = '#ffffff'; gCtx.fillRect(0,1,2,1);
+    const envTex = new THREE.CanvasTexture(gradientCanvas);
+    envTex.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = envTex;
+
+    let rafId;
+    function animate() {
+      rafId = requestAnimationFrame(animate);
+      controls.update();
+      const cw = canvas.clientWidth, ch = canvas.clientHeight;
+      if (canvas.width !== cw || canvas.height !== ch) {
+        renderer.setSize(cw, ch, false);
+        camera.aspect = cw / ch;
+        camera.updateProjectionMatrix();
+      }
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const viewer = { scene, camera, controls, renderer, get rafId() { return rafId; } };
+    // Use a proxy for rafId since it changes each frame
+    const entry = { renderer, controls, get rafId() { return rafId; } };
+    activeViewers.push(entry);
+    return viewer;
+  }
+
+  function fitCamera(camera, controls, obj) {
+    const box = new THREE.Box3().setFromObject(obj);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const d = Math.max(size.x, size.y, size.z) * 1.8;
+    camera.position.set(center.x+d*0.6, center.y+d*0.6, center.z+d*0.6);
+    controls.target.copy(center);
+    controls.update();
+  }
+
+  function loadMesh(viewer, url, color) {
+    new STLLoader().load(url, geo => {
+      geo.computeVertexNormals();
+      const mat = new THREE.MeshStandardMaterial({
+        color: color,
+        metalness: 0.15,
+        roughness: 0.35,
+        envMapIntensity: 0.8,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      viewer.scene.add(mesh);
+      fitCamera(viewer.camera, viewer.controls, mesh);
+    });
+  }
+
+  function loadPointCloud(viewer, url) {
+    new STLLoader().load(url, geo => {
+      const pts = samplePointsFromGeometry(geo, NUM_POINTS);
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+      const pc = new THREE.Points(g, new THREE.PointsMaterial({ color:0x2196F3, size:0.02, sizeAttenuation:true }));
+      viewer.scene.add(pc);
+      fitCamera(viewer.camera, viewer.controls, pc);
+    });
+  }
+
+  function showSlide(index) {
+    destroyActiveViewers();
+    const slides = document.querySelectorAll('.mesh-slide');
+    slides.forEach(s => s.classList.remove('active'));
+    const slide = slides[index];
+    slide.classList.add('active');
+    currentSlide = index;
+    document.getElementById('carousel-counter').textContent = `Page ${index+1} / ${totalSlides}`;
+
+    // Clear old canvases and create new viewers
+    const cells = slide.querySelectorAll('.mesh-cell');
+    cells.forEach(c => { c.innerHTML = ''; });
+
+    const rows = slide.querySelectorAll('.mesh-row');
+    rows.forEach(row => {
+      const id = row.dataset.id;
+      const [gtCell, pcCell, predCell] = row.querySelectorAll('.mesh-cell');
+
+      const gtV = createViewer(gtCell);
+      loadMesh(gtV, `${BASE}/gt/${id}.stl`, 0x4CAF50);
+
+      const pcV = createViewer(pcCell);
+      loadPointCloud(pcV, `${BASE}/gt/${id}.stl`);
+
+      const predV = createViewer(predCell);
+      loadMesh(predV, `${BASE}/pred/${id}.stl`, 0xFF9800);
+    });
+  }
+
+  function buildCarousel() {
+    const carousel = document.getElementById('mesh-carousel');
+    totalSlides = Math.ceil(SAMPLES.length / PER_SLIDE);
+
+    for (let s = 0; s < totalSlides; s++) {
+      const slide = document.createElement('div');
+      slide.className = 'mesh-slide';
+      const batch = SAMPLES.slice(s * PER_SLIDE, (s+1) * PER_SLIDE);
+
+      for (const id of batch) {
+        const row = document.createElement('div');
+        row.className = 'mesh-row';
+        row.dataset.id = id;
+        row.innerHTML = '<div class="mesh-cell"></div><div class="mesh-cell"></div><div class="mesh-cell"></div>';
+        slide.appendChild(row);
+      }
+      carousel.appendChild(slide);
+    }
+
+    document.getElementById('carousel-prev').addEventListener('click', () => {
+      showSlide((currentSlide - 1 + totalSlides) % totalSlides);
+    });
+    document.getElementById('carousel-next').addEventListener('click', () => {
+      showSlide((currentSlide + 1) % totalSlides);
+    });
+
+    showSlide(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildCarousel);
+  } else {
+    buildCarousel();
+  }
+  </script>
+
 
 
 
@@ -221,7 +567,7 @@
         <a class="icon-link" href="./static/videos/nerfies_paper.pdf">
           <i class="fas fa-file-pdf"></i>
         </a>
-        <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <a class="icon-link" href="https://github.com/Streakfull" class="external-link" disabled>
           <i class="fab fa-github"></i>
         </a>
       </div>
